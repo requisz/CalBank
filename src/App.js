@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SignIn from './components/SignIn/SignIn';
+import MainPage from './components/MainPage/MainPage';
+import CalorieBank from './components/CalorieBank/CalorieBank';
+import FoodDiary from './components/FoodDiary/FoodDiary';
+import FoodEntry from './components/FoodEntry/FoodEntry';
+import UserProfile from './components/UserProfile/UserProfile';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/CalorieBank" element={<CalorieBank />} />
+        <Route path="/FoodDiary" element={<FoodDiary />} />
+        <Route path="/FoodEntry" element={<FoodEntry />} />
+        <Route path="/UserProfile" element={<UserProfile />} />
+      </Routes>
+    </Router>
   );
 }
 
