@@ -5,6 +5,7 @@ import FoodEntry from '../FoodEntry/FoodEntry';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import RequireAuth from '../RequireAuth';
 
 function FoodDiary() {
     const navigate = useNavigate();
@@ -76,4 +77,5 @@ function FoodDiary() {
   );
 }
 
-export default FoodDiary;
+export default RequireAuth(FoodDiary);
+

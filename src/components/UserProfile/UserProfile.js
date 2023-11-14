@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
-import { doc, setDoc, getFirestore } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getFirestore } from 'firebase/firestore';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import RequireAuth from '../RequireAuth';
 
 function UserProfile() {
   const [age, setAge] = useState('');
@@ -32,6 +33,8 @@ function UserProfile() {
         notificationFrequency,
       };
 
+      
+
       try {
         // Save the user profile data to Firestore, under the 'userProfiles' collection, 
         // with a document ID that matches the current user's UID
@@ -51,6 +54,7 @@ function UserProfile() {
         <Header />
       <p>Enter your age: 
         <input type="number" value={age} onChange={(e) => setAge(e.target.value)} autocomplete="off" />
+
       </p>
       
       <p>Enter your height (in cm): 
@@ -86,4 +90,8 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+
+export default RequireAuth(UserProfile);
+
+
+

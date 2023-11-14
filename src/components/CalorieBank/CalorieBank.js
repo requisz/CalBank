@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import RequireAuth from '../RequireAuth';
 
 function CalorieBank() {
   // Assuming we start with a sample value of banked calories
@@ -37,4 +38,5 @@ function CalorieBank() {
   );
 }
 
-export default CalorieBank;
+export default RequireAuth(CalorieBank);
+
