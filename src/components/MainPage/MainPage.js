@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import RequireAuth from '../RequireAuth';
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -37,4 +38,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default RequireAuth(MainPage);

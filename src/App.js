@@ -8,6 +8,7 @@ import CalorieBank from './components/CalorieBank/CalorieBank';
 import FoodDiary from './components/FoodDiary/FoodDiary';
 import FoodEntry from './components/FoodEntry/FoodEntry';
 import UserProfile from './components/UserProfile/UserProfile';
+import SignUp from './components/SignUp/SignUp';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/FoodDiary" element={<FoodDiary />} />
         <Route path="/FoodEntry" element={<FoodEntry />} />
         <Route path="/UserProfile" element={<UserProfile />} />
+        <Route path="/SignUp" element={<SignUp />} />
       </Routes>
     </Router>
   );

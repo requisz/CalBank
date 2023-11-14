@@ -1,6 +1,8 @@
 // src/components/UserProfile.js
 
 import React, { useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { doc, setDoc, getFirestore } from 'firebase/firestore';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
@@ -14,6 +16,35 @@ function UserProfile() {
   const [cheatDays, setCheatDays] = useState('');
   const [notificationFrequency, setNotificationFrequency] = useState('24');
 
+  const db = getFirestore();
+  const auth = getAuth();
+
+  const saveProfile = async () => {
+    if (auth.currentUser) {
+      const userProfile = {
+        age,
+        height,
+        weight,
+        activityLevel,
+        daysCut,
+        poundsToLose,
+        cheatDays,
+        notificationFrequency,
+      };
+
+      try {
+        // Save the user profile data to Firestore, under the 'userProfiles' collection, 
+        // with a document ID that matches the current user's UID
+        await setDoc(doc(db, 'userProfiles', auth.currentUser.uid), userProfile);
+        alert('Profile saved successfully!');
+      } catch (error) {
+        console.error('Error writing document: ', error);
+        alert('Error saving profile.');
+      }
+    } else {
+      alert('No user is signed in to save profile.');
+    }
+  };
   return (
     <div>
         <h1>Profile Settings</h1>
@@ -36,17 +67,7 @@ function UserProfile() {
         <input type="number" value={activityLevel} onChange={(e) => setActivityLevel(e.target.value)} autocomplete="off" />
       </p>
       
-      <p>Enter your days of cut total (Recommended about 1 week per 1.5 lb to lose): 
-        <input type="number" value={daysCut} onChange={(e) => setDaysCut(e.target.value)} autocomplete="off" />
-      </p>
       
-      <p>Enter your desired pounds to lose: 
-        <input type="number" value={poundsToLose} onChange={(e) => setPoundsToLose(e.target.value)} autocomplete="off" />
-      </p>
-      
-      <p>Enter your desired number of cheat days: 
-        <input type="number" value={cheatDays} onChange={(e) => setCheatDays(e.target.value)} autocomplete="off" />
-      </p>
       <p>Notification settings: 
         <select 
           value={notificationFrequency} 
@@ -59,6 +80,7 @@ function UserProfile() {
           <option value="off">Off</option>
         </select>
       </p>
+      <button onClick={saveProfile}>Save Profile</button>
       <Footer />
     </div>
   );

@@ -1,35 +1,28 @@
-// src/components/SignIn.js
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase'; // Adjust the path if your firebase.js file is located elsewhere
 
-function SignIn() {
+function SignUp() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = async (event) => {
+  const handleSignUp = async (event) => {
     event.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/main');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(userCredential); // You can use this for further user setup or navigation
+      navigate('/main'); // Redirect to the main page or a welcome page after successful sign-up
     } catch (error) {
-      console.error("Error signing in with email and password", error);
+      console.error("Error creating a new user", error);
       // Add logic here to display error messages to the user
     }
   };
-  const handleSignUp = () => {
-    // Redirect to the Bank
-    navigate('/SignUp');
-  };
-  
 
   return (
     <div>
-      <button onClick={handleSignUp}>Sign Up</button>
-      <form onSubmit={handleSignIn}>
+      <form onSubmit={handleSignUp}>
         <input
           type="email"
           value={email}
@@ -44,10 +37,10 @@ function SignIn() {
           placeholder="Password"
           required
         />
-        <button type="submit">Sign In</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
 }
 
-export default SignIn;
+export default SignUp;
