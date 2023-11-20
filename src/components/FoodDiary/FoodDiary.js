@@ -1,4 +1,4 @@
-// src/components/FoodDiary.js
+
 
 import React from 'react';
 import FoodEntry from '../FoodEntry/FoodEntry';
@@ -14,7 +14,7 @@ function FoodDiary() {
     { name: 'Chicken Breast', protein: 31, carbs: 0, fats: 3.6, calories: 165 },
     { name: 'Brown Rice', protein: 2.6, carbs: 23, fats: 0.9, calories: 111 },
     { name: 'Avocado', protein: 2, carbs: 9, fats: 15, calories: 160 },
-    // Add more sample foods as needed
+
   ];
 
   const handleFoodEntry = () => {

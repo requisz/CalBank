@@ -1,4 +1,4 @@
-// src/components/FoodEntry.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import Header from '../Header/Header';
@@ -19,7 +19,7 @@ function FoodEntry() {
 
   const handleAddFood = (event) => {
     event.preventDefault();
-    // Here you would typically handle the submission to add the food to your database or state
+
     console.log({ foodName, protein, carbs, fats, calories });
   };
 
@@ -61,7 +61,7 @@ const renderSearchResults = () => {
       <p>Fats: {findNutrient(food.foodNutrients, 'Total lipid (fat)')} g</p>
       <p>Carbs: {findNutrient(food.foodNutrients, 'Carbohydrate, by difference')} g</p>
       <p>Calories: {findNutrient(food.foodNutrients, 'Energy')} kcal</p>
-      {/* Add more fields as needed */}
+
     </div>
   ));
 };

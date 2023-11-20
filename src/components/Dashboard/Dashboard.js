@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import './Dashboard.css'; // Assuming you have a Dashboard.css for styling
+import './Dashboard.css'; 
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -28,6 +28,10 @@ function Dashboard() {
         // Redirect to the Bank
         navigate('/main');
     };
+    const handleFriends= () => {
+      // Redirect to the Bank
+      navigate('/Friends');
+  };
 
 
 
@@ -40,8 +44,7 @@ return (
         <button onClick={handleUserProfile}>Profile Settings</button>
         <button onClick={handleFoodDiary}>Food Diary</button>
         <button onClick={handleCalorieBank}>Calorie Bank</button>
-        
-        {/* More buttons if needed */}
+        <button onClick={handleFriends}>Friends</button>
       </div>
     </div>
   );

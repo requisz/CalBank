@@ -1,4 +1,4 @@
-// src/App.js
+
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -9,6 +9,7 @@ import FoodDiary from './components/FoodDiary/FoodDiary';
 import FoodEntry from './components/FoodEntry/FoodEntry';
 import UserProfile from './components/UserProfile/UserProfile';
 import SignUp from './components/SignUp/SignUp';
+import Friends from './components/Friends/Friends';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/FoodEntry" element={<FoodEntry />} />
         <Route path="/UserProfile" element={<UserProfile />} />
         <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/Friends" element={<Friends />} />
       </Routes>
     </Router>
   );

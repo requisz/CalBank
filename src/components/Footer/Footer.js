@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, signOut } from 'firebase/auth'; // Import signOut and getAuth
+import { getAuth, signOut } from 'firebase/auth'; 
 
 function Footer() {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-// src/components/UserProfile.js
+
 
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
@@ -36,8 +36,7 @@ function UserProfile() {
       
 
       try {
-        // Save the user profile data to Firestore, under the 'userProfiles' collection, 
-        // with a document ID that matches the current user's UID
+
         await setDoc(doc(db, 'userProfiles', auth.currentUser.uid), userProfile);
         alert('Profile saved successfully!');
       } catch (error) {

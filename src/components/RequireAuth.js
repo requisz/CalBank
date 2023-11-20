@@ -1,4 +1,4 @@
-// src/components/RequireAuth.js
+
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,7 @@ const RequireAuth = (Component) => {
     }, [navigate, auth]);
 
     if (loading) {
-      return <div>Loading...</div>; // Or any loading spinner component
+      return <div>Loading...</div>; 
     }
 
     return <Component />;

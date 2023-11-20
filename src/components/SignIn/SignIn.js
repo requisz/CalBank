@@ -1,9 +1,9 @@
-// src/components/SignIn.js
+
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase'; // Adjust the path if your firebase.js file is located elsewhere
+import { auth } from '../../firebase'; 
 
 function SignIn() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function SignIn() {
       navigate('/main');
     } catch (error) {
       console.error("Error signing in with email and password", error);
-      // Add logic here to display error messages to the user
+
     }
   };
   const handleSignUp = () => {
