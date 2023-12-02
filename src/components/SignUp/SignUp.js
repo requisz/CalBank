@@ -24,23 +24,32 @@ function SignUp() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSignUp}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <button type="submit">Sign Up</button>
+    <div className="container">
+      <form className="signin-form" onSubmit={handleSignUp}>
+        <h2 className="signin-title">Sign Up</h2>
+        <div className="form-group">
+          <input
+            type="email"
+            className="input-field"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            className="input-field"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
+        </div>
+        <button type="submit" className="button">
+          Sign Up
+        </button>
       </form>
     </div>
   );

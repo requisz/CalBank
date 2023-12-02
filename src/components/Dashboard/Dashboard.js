@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import './Dashboard.css'; 
+import '../../App.css'; 
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -39,11 +39,12 @@ function Dashboard() {
 return (
     
     <div className="dashboard">
+      <div> <br></br></div>
       <div className="dashboard-buttons">
-        <button onClick={handleMain}>Home</button>
-        <button onClick={handleUserProfile}>Profile Settings</button>
-        <button onClick={handleFoodDiary}>Food Diary</button>
-        <button onClick={handleCalorieBank}>Calorie Bank</button>
+        <button className="button" onClick={handleMain}>Home</button>
+        <button className="button" onClick={handleUserProfile}>Profile Settings</button>
+        <button className="button" onClick={handleFoodDiary}>Food Diary</button>
+        <button className="button" onClick={handleCalorieBank}>Calorie Bank</button>
       </div>
     </div>
   );

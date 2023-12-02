@@ -189,7 +189,6 @@ function UserProfile() {
         <p>Activity Level: {activityLevel}</p>
         <p>Days Cut: {daysCutOrBulk}</p>
         <p>Pounds to Lose: {poundsChange}</p>
-        <p>Cheat Days: {cheatDays}</p>
         <p>
           Notification Frequency:{" "}
           {notificationFrequency === "off"
@@ -300,7 +299,7 @@ function UserProfile() {
         </>
       )}
 
-      {goal && (
+      {/* {goal && (
         <p>
           Enter Cheat Days:
           <input
@@ -311,18 +310,20 @@ function UserProfile() {
           />
         </p>
       )}
+      */}
 
       
-      <button onClick={saveProfile} className="button">Save Profile</button>
-      <button className="button" onClick={() => console.log(getDailyCalorieLimitForCut())}>
-        Calculate Daily Calorie Limit
-      </button>
-      </div>
-      <div>
-        <br></br>
-      </div>
-      <div>
-        <br></br>
+<button
+  onClick={() => {
+    saveProfile();
+    console.log(getDailyCalorieLimitForCut());
+    window.location.reload();
+  }}
+  className="button"
+>
+  Save Profile
+</button>
+
       </div>
       <div>
         <br></br>

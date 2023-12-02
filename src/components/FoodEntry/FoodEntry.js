@@ -141,7 +141,7 @@ function FoodEntry() {
             required
           />
 
-          <button type="submit">Add Food</button>
+          <button className="button" type="submit">Add Food</button>
         </form>
       </div>
 
@@ -155,7 +155,7 @@ function FoodEntry() {
             placeholder="Search..."
             required
           />
-          <button type="submit">Search</button>
+          <button className="button" type="submit">Search</button>
         </form>
         <div>{renderSearchResults()}</div>
       </div>
