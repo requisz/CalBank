@@ -1,38 +1,414 @@
-.App {
+:root {
+  /* Define color scheme */
+  --primary-color: #000000; /* Primary color for text and elements */
+  --secondary-color: #66545e; /* Secondary color for hover states */
+  --background-color:  #ece6e3; /* Background color */
+  --input-background-color: #a39193; /* Input fields background color */
+  --button-color: #f6e0b5; /* Button color */
+}
+
+/* Base Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+}
+
+/* Utility Classes */
+.container {
+  width: 90%;
+  margin: auto;
+  max-width: 600px;
+}
+
+/* Responsive Tabs */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+}
+
+.tab {
+  flex-grow: 1;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tab:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Hide/Show Tab Content */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: slideDown 0.5s;
+}
+
+/* Slide Down Animation */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .tabs {
+    flex-direction: column;
+  }
+}
+
+
+.button {
+  background-color: var(--button-color);
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+
+}
+
+.input-field {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: var(--input-background-color);
+  color: var(--primary-color);
+  transition: background-color 0.3s, border-color 0.3s;
+
+}
+.input-field:focus {
+  background-color: lighten(var(--input-background-color), 10%);
+  border-color: var(--primary-color);
+}
+
+/* SignIn Page Specific Styles */
+.signin-form {
+  background-color: var(--input-background-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 50px;
+}
+
+.signin-title {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+/* Layout */
+.form-group {
+  margin-bottom: 15px;
+}
+
+
+/* ... Existing styles ... */
+
+/* MainPage Page Specific Styles */
+.main-page {
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Adjust margin as needed */
+  transition: box-shadow 0.3s;
+
+}
+.main-page:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.main-page-title {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.main-page-content {
+  color: var(--primary-color);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Header Styles */
+.header {
+  background-color: var(--input-background-color);
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header p {
+  color: var(--primary-color);
+  margin: 5px 0;
+}
+@media (max-width: 600px) {
+  .header {
+    text-align: left;
+    padding: 15px;
+  }
+}
+.menu-button {
+  background-color: var(--button-color);
+  color: var(--primary-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.menu-button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+
+.header-title {
+  color: var(--secondary-color);
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.calorie-info {
+  background-color: var(--button-color);
+  color: var(--primary-color);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
-/* havent touched this yet, still in default react setting */
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.calorie-info {
+  background: linear-gradient(to right, var(--secondary-color), var(--button-color));
+  color: var(--primary-color);
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.calorie-info p {
+  margin: 5px 0;
+  color: var(--primary-color);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* UserProfile Enhanced Styles */
+.user-profile {
+  background-color: var(--background-color);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin: 30px auto;
+  transition: all 0.3s ease;
+}
+
+.user-profile-title {
+  color: var(--secondary-color);
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.user-profile-content {
+  background: linear-gradient(145deg, var(--secondary-color), var(--button-color));
+  padding: 20px;
+  border-radius: 10px;
+  color: var(--primary-color);
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.setting-section {
+  background: var(--input-background-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  display: none;
+}
+
+.setting-section.active {
+  display: block;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.food-diary {
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.food-diary h1 {
+  text-align: center;
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+}
+
+.food-diary table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.food-diary th, .food-diary td {
+  border: 1px solid var(--primary-color);
+  padding: 8px;
+  text-align: left;
+  color: var(--primary-color);
+}
+
+.food-diary th {
+  background-color: var(--input-background-color);
+}
+
+.food-diary tr:nth-child(even) {
+  background-color: var(--button-color);
+}
+
+.food-diary tr:hover {
+  background-color: var(--secondary-color);
+  color: var(--background-color);
+}
+
+.food-diary button {
+  display: block;
+  margin: 20px auto;
+}
+
+.calories-banked-page {
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+.calories-banked-page h1 {
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+}
+
+.calories-banked-page input {
+  margin: 10px 0;
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--primary-color);
+  background-color: var(--input-background-color);
+}
+
+.calories-banked-page button {
+  background-color: var(--button-color);
+  color: var(--primary-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.calories-banked-page button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+.contact-item {
+  min-width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 16px;
 }
 
-.App-link {
-  color: #61dafb;
+.contact-info {
+  max-width: calc(100% - 46px);
+  width: calc(100% - 46px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.contact-title {
+  color: var(--light-gray-70);
+  font-size: var(--fs-8);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.contact-info :is(.contact-link, time, address) {
+  color: var(--white-2);
+  font-size: var(--fs-7);
+}
+
+.contact-info address { font-style: normal; }
+
+.contacts-list { gap: 20px; }
+
+  .contact-info {
+    max-width: calc(100% - 64px);
+    width: calc(100% - 64px);
   }
-  to {
-    transform: rotate(360deg);
+
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
+  
+  .content-wrap {
+    flex: 1;
+  }
+
+ 
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px; /* Adjust as needed */
+  }
+  
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--input-background-color);
+    color: var(--primary-color);
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--secondary-color);
 }

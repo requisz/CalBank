@@ -44,7 +44,6 @@ return (
         <button onClick={handleUserProfile}>Profile Settings</button>
         <button onClick={handleFoodDiary}>Food Diary</button>
         <button onClick={handleCalorieBank}>Calorie Bank</button>
-        <button onClick={handleFriends}>Friends</button>
       </div>
     </div>
   );

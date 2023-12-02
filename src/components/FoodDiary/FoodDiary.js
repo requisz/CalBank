@@ -1,48 +1,96 @@
-
-
-import React from 'react';
-import FoodEntry from '../FoodEntry/FoodEntry';
-import { useNavigate } from 'react-router-dom';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import RequireAuth from '../RequireAuth';
+import React, { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "../../firebase"; // Adjust the path as needed
+import { useNavigate } from "react-router-dom";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import RequireAuth from "../RequireAuth";
 
 function FoodDiary() {
-    const navigate = useNavigate();
-  // Sample array of food items
-  const foodItems = [
-    { name: 'Chicken Breast', protein: 31, carbs: 0, fats: 3.6, calories: 165 },
-    { name: 'Brown Rice', protein: 2.6, carbs: 23, fats: 0.9, calories: 111 },
-    { name: 'Avocado', protein: 2, carbs: 9, fats: 15, calories: 160 },
+  const [currentUser, setCurrentUser] = useState(null);
+  const [foodItems, setFoodItems] = useState([]);
+  const navigate = useNavigate();
+  const auth = getAuth();
 
-  ];
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return unsubscribe; // Cleanup subscription on unmount
+  }, []);
+
+  useEffect(() => {
+    const fetchFoodDiary = async () => {
+      if (currentUser) {
+        const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+        const q = query(
+          collection(
+            db,
+            `userFoodDiaries/${currentUser.uid}/entries/${today}/diaryEntries`
+          )
+        );
+
+        try {
+          const querySnapshot = await getDocs(q);
+          const foods = querySnapshot.docs.map((doc) => doc.data());
+          setFoodItems(foods);
+
+          // Calculate total calories for the day
+          const totalCalories = foods.reduce(
+            (total, food) => total + food.calories,
+            0
+          );
+          // Save total calories to Firestore
+          await setDoc(
+            doc(db, `userFoodDiaries/${currentUser.uid}/entries/${today}`),
+            { totalCalories },
+            { merge: true }
+          );
+        } catch (error) {
+          console.error("Error fetching food diary:", error);
+        }
+      }
+    };
+
+    fetchFoodDiary();
+  }, [currentUser]);
 
   const handleFoodEntry = () => {
-    // Redirect to the Bank
-    navigate('/FoodEntry');
-};
+    navigate("/FoodEntry");
+  };
 
   // Calculate totals using reduce
-  const totals = foodItems.reduce((acc, food) => {
-    return {
-      totalProtein: acc.totalProtein + food.protein,
-      totalCarbs: acc.totalCarbs + food.carbs,
-      totalFats: acc.totalFats + food.fats,
-      totalCalories: acc.totalCalories + food.calories,
-    };
-  }, {
-    totalProtein: 0,
-    totalCarbs: 0,
-    totalFats: 0,
-    totalCalories: 0,
-  });
-  
+  const totals = foodItems.reduce(
+    (acc, food) => {
+      return {
+        totalProtein: acc.totalProtein + food.protein,
+        totalCarbs: acc.totalCarbs + food.carbs,
+        totalFats: acc.totalFats + food.fats,
+        totalCalories: acc.totalCalories + food.calories,
+      };
+    },
+    {
+      totalProtein: 0,
+      totalCarbs: 0,
+      totalFats: 0,
+      totalCalories: 0,
+    }
+  );
 
   return (
-    <div>
+    <div className="page-container">
+      <div className="food-diary">
       <h1>Food Diary</h1>
       <Header />
-      <button onClick={handleFoodEntry}>Enter New Food</button>
+      <button className="menu-button" onClick={handleFoodEntry}>Enter New Food</button>
       <table>
         <thead>
           <tr>
@@ -56,7 +104,7 @@ function FoodDiary() {
         <tbody>
           {foodItems.map((food, index) => (
             <tr key={index}>
-              <td>{food.name}</td>
+              <td>{food.foodName}</td>
               <td>{food.protein}</td>
               <td>{food.carbs}</td>
               <td>{food.fats}</td>
@@ -64,18 +112,30 @@ function FoodDiary() {
             </tr>
           ))}
           <tr>
-            <td><strong>Totals:</strong></td>
-            <td><strong>{totals.totalProtein}</strong></td>
-            <td><strong>{totals.totalCarbs}</strong></td>
-            <td><strong>{totals.totalFats}</strong></td>
-            <td><strong>{totals.totalCalories}</strong></td>
+            <td>
+              <strong>Totals:</strong>
+            </td>
+            <td>
+              <strong>{totals.totalProtein}</strong>
+            </td>
+            <td>
+              <strong>{totals.totalCarbs}</strong>
+            </td>
+            <td>
+              <strong>{totals.totalFats}</strong>
+            </td>
+            <td>
+              <strong>{totals.totalCalories}</strong>
+            </td>
           </tr>
         </tbody>
       </table>
       <Footer />
     </div>
+    </div>
+    
+      
   );
 }
 
 export default RequireAuth(FoodDiary);
-
