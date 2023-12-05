@@ -3,20 +3,23 @@ import { getAuth } from 'firebase/auth';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import '../../App.css';
+import RequireAuth from '../RequireAuth';
 import { doc, getDoc, updateDoc, getFirestore } from 'firebase/firestore';
 
 function CaloriesBankedPage() {
+    // State for managing calories data
     const [caloriesToStore, setCaloriesToStore] = useState(0);
     const [caloriesToUse, setCaloriesToUse] = useState(0);
     const [caloriesBanked, setCaloriesBanked] = useState(0);
     const [caloriesLeftToday, setCaloriesLeftToday] = useState(0);
 
+    // Firebase initialization
     const db = getFirestore();
     const auth = getAuth();
     const userId = auth.currentUser?.uid;
 
+    // Fetch initial user data from Firestore
     useEffect(() => {
-        // Fetch initial data
         const fetchData = async () => {
             if (userId) {
                 const userRef = doc(db, "userProfiles", userId);
@@ -35,12 +38,14 @@ function CaloriesBankedPage() {
         fetchData();
     }, [userId, db]);
 
+    // Function to handle storing calories
     const handleStoreCalories = async () => {
+        // Calculation for new calories banked and left today
         const newCaloriesBanked = caloriesBanked + caloriesToStore;
         const newCaloriesLeftToday = caloriesLeftToday - caloriesToStore;
 
+        // Update Firestore with new values
         if (newCaloriesLeftToday >= 0 && userId) {
-            // Update Firestore
             const userRef = doc(db, "userProfiles", userId);
             try {
                 await updateDoc(userRef, {
@@ -57,17 +62,20 @@ function CaloriesBankedPage() {
         }
     };
 
+    // Function to handle using banked calories
     const handleUseCalories = async () => {
+        // Ensure there are enough banked calories to use
         if (caloriesToUse > caloriesBanked) {
             alert("Not enough banked calories to use!");
             return;
         }
 
+        // Update calories banked and left today
         const newCaloriesBanked = caloriesBanked - caloriesToUse;
         const newCaloriesLeftToday = caloriesLeftToday + caloriesToUse;
 
+        // Update Firestore with new values
         if (userId) {
-            // Update Firestore
             const userRef = doc(db, "userProfiles", userId);
             try {
                 await updateDoc(userRef, {
@@ -86,9 +94,11 @@ function CaloriesBankedPage() {
         <div className="calories-banked-page">
             <h1>Bank Your Calories</h1>
             <Header/>
+            {/* Display current calories status */}
             <p>Calories Left Today: {caloriesLeftToday}</p>
             <p>Calories Banked: {caloriesBanked}</p>
             
+            {/* Input and button to store calories */}
             <div>
                 <input
                     type="number"
@@ -98,6 +108,7 @@ function CaloriesBankedPage() {
                 <button onClick={handleStoreCalories}>Store Calories</button>
             </div>
 
+            {/* Input and button to use banked calories */}
             <div>
                 <input
                     type="number"
@@ -111,4 +122,4 @@ function CaloriesBankedPage() {
     );
 }
 
-export default CaloriesBankedPage;
+export default RequireAuth(CaloriesBankedPage);

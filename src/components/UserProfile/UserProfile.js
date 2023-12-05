@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore";
+import { doc, setDoc, getFirestore, getDoc, addDoc } from "firebase/firestore";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import RequireAuth from "../RequireAuth";
 import '../../App.css';
+import { useNavigate } from "react-router-dom";
+import { collection } from "firebase/firestore";
 
 function UserProfile() {
-  // Existing state variables
+  
   const [age, setAge] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [activityLevel, setActivityLevel] = useState("");
   const [notificationFrequency, setNotificationFrequency] = useState("24");
 
-  // New state variables
-  const [goal, setGoal] = useState(""); // 'bulk', 'cut', 'maintain'
+  const [emailTo, setEmailTo] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailHtmlContent, setEmailHtmlContent] = useState('');
+  const [emailTextContent, setEmailTextContent] = useState('');
+
+
+  const [goal, setGoal] = useState(""); 
   const [daysCutOrBulk, setDaysCutOrBulk] = useState("");
   const [poundsChange, setPoundsChange] = useState("");
   const [cheatDays, setCheatDays] = useState("");
   const [dailyCalorieLimit, setDailyCalorieLimit] = useState(0);
-
+  const navigate = useNavigate();
   const db = getFirestore();
   const auth = getAuth();
 
@@ -29,6 +36,34 @@ function UserProfile() {
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
+  const handleClick= () => {
+    
+    navigate('/Friends');
+  };
+
+  const sendEmail = async () => {
+    const emailData = {
+      to: ["rakesh.pamulapati@gmail.com"], // 'to' as an array
+      message: {
+        subject: "SAMPLE EMAIL: You still have calories left in the day!",
+        html: "Please log into the caloric web app and complete your food diary to stay on track with your progress.",
+        text: "Please log into the caloric web app and complete your food diary to stay on track with your progress."
+      }
+    };
+  
+    try {
+      await addDoc(collection(db, "mail"), emailData);
+      alert("Email queued for sending!");
+    } catch (error) {
+      console.error("Error sending email: ", error);
+      alert("Error sending email.");
+    }
+  };
+  
+  
+  
+  
+  
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -45,7 +80,7 @@ function UserProfile() {
             setNotificationFrequency(data.notificationFrequency || "24");
             setGoal(data.goal || "");
 
-            // Set the goal-specific fields based on the retrieved data
+            
             if (data.goal === "bulk" || data.goal === "cut") {
               setDaysCutOrBulk(data.daysCutOrBulk || "");
               setPoundsChange(data.poundsChange || "");
@@ -72,9 +107,9 @@ function UserProfile() {
     daysCutOrBulk,
     poundsChange
   ) => {
-    // Add validation for inputs
+    
     if (!age || !height || !weight || !activityLevel || !goal) {
-      return 0; // Return 0 or some default value if inputs are invalid
+      return 0; 
     }
 
     const bmr = calculateBMR(Number(weight), Number(height), Number(age));
@@ -86,10 +121,16 @@ function UserProfile() {
       const targetDailyBurn = totalCalsToLose / Number(daysCutOrBulk);
       return Math.round(maintenanceCalories - targetDailyBurn);
     } else if (goal === "maintain") {
-      // Handle 'maintain' goal here
+      
       return Math.round(maintenanceCalories);
     }
-    // Add handling for 'bulk' or other goals if necessary
+    else if (goal === "bulk") {
+      const totalCalsToGain = (0.015 * poundsChange * 3500); 
+      const targetDailyGain = totalCalsToGain / Number(daysCutOrBulk);
+      return Math.round(maintenanceCalories + targetDailyGain);
+    }
+    
+    
     return maintenanceCalories;
   };
   useEffect(() => {
@@ -103,77 +144,84 @@ function UserProfile() {
       poundsChange
     );
     setDailyCalorieLimit(calculatedLimit);
-  }, [age, height, weight, activityLevel, goal, daysCutOrBulk, poundsChange]); // Dependencies array
+  }, [age, height, weight, activityLevel, goal, daysCutOrBulk, poundsChange]); 
 
   const saveProfile = async () => {
-    if (auth.currentUser) {
-      // Calculate the daily calorie limit using current input values
-      const calculatedLimit = calculateDailyCalorieLimit(
-        age,
-        height,
-        weight,
-        activityLevel,
-        goal,
-        daysCutOrBulk,
-        poundsChange
+  if (auth.currentUser) {
+    
+    const calculatedLimit = calculateDailyCalorieLimit(
+      age,
+      height,
+      weight,
+      activityLevel,
+      goal,
+      daysCutOrBulk,
+      poundsChange
+    );
+
+    const userProfile = {
+      age,
+      height,
+      weight,
+      activityLevel,
+      goal,
+      dailyCalorieLimit: calculatedLimit,
+      daysCutOrBulk: goal === "maintain" ? null : daysCutOrBulk,
+      poundsChange: goal === "maintain" ? null : poundsChange,
+      cheatDays: goal !== "maintain" ? cheatDays : null,
+      notificationFrequency,
+    };
+
+    try {
+      await setDoc(
+        doc(db, "userProfiles", auth.currentUser.uid),
+        userProfile
       );
-
-      const userProfile = {
-        age,
-        height,
-        weight,
-        activityLevel,
-        goal,
-        dailyCalorieLimit: calculatedLimit,
-        daysCutOrBulk: goal === "maintain" ? null : daysCutOrBulk,
-        poundsChange: goal === "maintain" ? null : poundsChange,
-        cheatDays: goal !== "maintain" ? cheatDays : null,
-        notificationFrequency,
-      };
-
-      try {
-        await setDoc(
-          doc(db, "userProfiles", auth.currentUser.uid),
-          userProfile
-        );
-        setDailyCalorieLimit(calculatedLimit); // Update state with calculated limit
-        alert("Profile saved successfully!");
-      } catch (error) {
-        console.error("Error writing document: ", error);
-        alert("Error saving profile.");
-      }
-    } else {
-      alert("No user is signed in to save profile.");
+      setDailyCalorieLimit(calculatedLimit); 
+      alert("Profile saved successfully!");
+    } catch (error) {
+      console.error("Error writing document: ", error);
+      alert("Error saving profile.");
     }
-  };
+  } else {
+    alert("No user is signed in to save profile.");
+  }
+};
 
-  // Function to calculate activity factor
+
+
+  
   const getAFactor = (level) => {
     const activityFactors = [1.2, 1.375, 1.55, 1.725, 1.9];
     return activityFactors[level - 1] || 1.45;
   };
 
-  // Function to calculate BMR (Basal Metabolic Rate)
+  
   const calculateBMR = (weight, height, age) => {
-    // Assuming the user is male. Adjust the formula if your app supports different genders.
+    
     return 10 * weight + 6.25 * height - 5 * age + 5;
   };
 
-  // Function to calculate maintenance calories
+  
   const getMaintenanceCalories = () => {
     const bmr = calculateBMR(Number(weight), Number(height), Number(age));
     const activityFactor = getAFactor(Number(activityLevel));
     return Math.round(bmr * activityFactor);
   };
 
-  // Function to calculate daily calorie limit for cutting
+  
   const getDailyCalorieLimitForCut = () => {
     if (goal === "cut") {
       const totalCalsToLose = 3500 * Number(poundsChange);
       const targetDailyBurn = totalCalsToLose / Number(daysCutOrBulk);
       return getMaintenanceCalories() - targetDailyBurn;
     }
-    return getMaintenanceCalories(); // Return maintenance calories for other goals
+    if(goal === "bulk") {
+      const totalCalsToGain = 3500 * Number(poundsChange);
+      const targetDailyGain = totalCalsToGain / Number(daysCutOrBulk);
+      return getMaintenanceCalories + targetDailyGain;
+    }
+    return getMaintenanceCalories(); 
   };
 
   return (
@@ -188,7 +236,7 @@ function UserProfile() {
         <p>Weight: {weight} kg</p>
         <p>Activity Level: {activityLevel}</p>
         <p>Days Cut: {daysCutOrBulk}</p>
-        <p>Pounds to Lose: {poundsChange}</p>
+        <p>Pounds to Change: {poundsChange}</p>
         <p>
           Notification Frequency:{" "}
           {notificationFrequency === "off"
@@ -269,7 +317,7 @@ function UserProfile() {
         Goal:
         <select value={goal} onChange={(e) => setGoal(e.target.value)}>
           <option value="">Select Goal</option>
-          <option value="bulk">Bulk</option>
+          {/* <option value="bulk">Bulk</option> */}
           <option value="cut">Cut</option>
           <option value="maintain">Maintain</option>
         </select>
@@ -317,12 +365,13 @@ function UserProfile() {
   onClick={() => {
     saveProfile();
     console.log(getDailyCalorieLimitForCut());
-    window.location.reload();
   }}
   className="button"
 >
   Save Profile
 </button>
+<button onClick={sendEmail}>Sample Email</button>
+
 
       </div>
       <div>

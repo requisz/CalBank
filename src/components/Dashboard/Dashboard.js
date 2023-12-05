@@ -12,24 +12,24 @@ function Dashboard() {
     const navigate = useNavigate();
 
     const handleUserProfile = () => {
-    // Redirect to the Profile
+    
     navigate('/UserProfile');
     };
 
     const handleFoodDiary = () => {
-        // Redirect to the Profile
+        
         navigate('/FoodDiary');
     };
     const handleCalorieBank = () => {
-        // Redirect to the Bank
+        
         navigate('/CalorieBank');
     };
     const handleMain = () => {
-        // Redirect to the Bank
+        
         navigate('/main');
     };
     const handleFriends= () => {
-      // Redirect to the Bank
+      
       navigate('/Friends');
   };
 

@@ -8,11 +8,11 @@ import Footer from "../Footer/Footer";
 
 function MainPage() {
   return (
-    <div className="main-page"> {/* Apply the main-page class */}
-    <h1 className="header-title">Caloric Bank App</h1>{/* Apply the main-page-title class */}
+    <div className="main-page"> 
+    <h1 className="header-title">Caloric Bank App</h1>
       <Header />
 
-      <div className="main-page-content"> {/* Apply the main-page-content class */}
+      <div className="main-page-content"> 
         <p>
           Calorie Bank is your innovative approach to managing nutrition and
           maintaining a healthy lifestyle. Our web app is designed to empower you

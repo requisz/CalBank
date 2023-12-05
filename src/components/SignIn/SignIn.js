@@ -20,7 +20,7 @@ function SignIn() {
     }
   };
   const handleSignUp = () => {
-    // Redirect to the Bank
+    
     navigate("/SignUp");
   };
 

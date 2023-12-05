@@ -1,9 +1,8 @@
 :root {
-  /* Define color scheme */
-  --primary-color: #000000; /* Primary color for text and elements */
-  --secondary-color: #66545e; /* Secondary color for hover states */
-  --background-color:  #ece6e3; /* Background color */
-  --input-background-color: #a39193; /* Input fields background color */
+  --primary-color: #2d545e; /* Primary color for text and elements */
+  --secondary-color: #12343b; /* Secondary color for hover states */
+  --background-color:   #fceed1; /* Background color */
+  --input-background-color: #c89666; /* Input fields background color */
   --button-color: #f6e0b5; /* Button color */
 }
 

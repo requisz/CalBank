@@ -17,7 +17,7 @@ function SignUp() {
         password
       );
       console.log(userCredential);
-      navigate("/main"); // Redirect to the main page or a welcome page after successful sign-up
+      navigate("/main"); 
     } catch (error) {
       console.error("Error creating a new user", error);
     }

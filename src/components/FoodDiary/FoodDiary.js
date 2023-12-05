@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  setDoc,
-  doc,
-} from "firebase/firestore";
-import { db } from "../../firebase"; // Adjust the path as needed
+import { collection, query, getDocs, setDoc, doc } from "firebase/firestore";
+import { db } from "../../firebase"; 
 import { useNavigate } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
@@ -20,17 +13,19 @@ function FoodDiary() {
   const navigate = useNavigate();
   const auth = getAuth();
 
+  // Subscribe to auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
-    return unsubscribe; // Cleanup subscription on unmount
+    return unsubscribe;
   }, []);
 
+  // Fetch food diary entries for the current user
   useEffect(() => {
     const fetchFoodDiary = async () => {
       if (currentUser) {
-        const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+        const today = new Date().toISOString().split("T")[0];
         const q = query(
           collection(
             db,
@@ -43,12 +38,11 @@ function FoodDiary() {
           const foods = querySnapshot.docs.map((doc) => doc.data());
           setFoodItems(foods);
 
-          // Calculate total calories for the day
+          // Calculate and save total daily calories
           const totalCalories = foods.reduce(
             (total, food) => total + food.calories,
             0
           );
-          // Save total calories to Firestore
           await setDoc(
             doc(db, `userFoodDiaries/${currentUser.uid}/entries/${today}`),
             { totalCalories },
@@ -63,11 +57,12 @@ function FoodDiary() {
     fetchFoodDiary();
   }, [currentUser]);
 
+  // Navigate to food entry page
   const handleFoodEntry = () => {
     navigate("/FoodEntry");
   };
 
-  // Calculate totals using reduce
+  // Calculate totals of macronutrients and calories
   const totals = foodItems.reduce(
     (acc, food) => {
       return {
@@ -88,53 +83,41 @@ function FoodDiary() {
   return (
     <div className="page-container">
       <div className="food-diary">
-      <h1>Food Diary</h1>
-      <Header />
-      <button className="menu-button" onClick={handleFoodEntry}>Enter New Food</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Food</th>
-            <th>Protein (g)</th>
-            <th>Carbs (g)</th>
-            <th>Fats (g)</th>
-            <th>Calories</th>
-          </tr>
-        </thead>
-        <tbody>
-          {foodItems.map((food, index) => (
-            <tr key={index}>
-              <td>{food.foodName}</td>
-              <td>{food.protein}</td>
-              <td>{food.carbs}</td>
-              <td>{food.fats}</td>
-              <td>{food.calories}</td>
+        <h1>Food Diary</h1>
+        <Header />
+        <button className="menu-button" onClick={handleFoodEntry}>Enter New Food</button>
+        <table>
+          <thead>
+            <tr>
+              <th>Food</th>
+              <th>Protein (g)</th>
+              <th>Carbs (g)</th>
+              <th>Fats (g)</th>
+              <th>Calories</th>
             </tr>
-          ))}
-          <tr>
-            <td>
-              <strong>Totals:</strong>
-            </td>
-            <td>
-              <strong>{totals.totalProtein}</strong>
-            </td>
-            <td>
-              <strong>{totals.totalCarbs}</strong>
-            </td>
-            <td>
-              <strong>{totals.totalFats}</strong>
-            </td>
-            <td>
-              <strong>{totals.totalCalories}</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <Footer />
+          </thead>
+          <tbody>
+            {foodItems.map((food, index) => (
+              <tr key={index}>
+                <td>{food.foodName}</td>
+                <td>{food.protein}</td>
+                <td>{food.carbs}</td>
+                <td>{food.fats}</td>
+                <td>{food.calories}</td>
+              </tr>
+            ))}
+            <tr>
+              <td><strong>Totals:</strong></td>
+              <td><strong>{totals.totalProtein}</strong></td>
+              <td><strong>{totals.totalCarbs}</strong></td>
+              <td><strong>{totals.totalFats}</strong></td>
+              <td><strong>{totals.totalCalories}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <Footer />
+      </div>
     </div>
-    </div>
-    
-      
   );
 }
 
