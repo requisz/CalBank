@@ -40,7 +40,7 @@ function UserProfile() {
     
     navigate('/Friends');
   };
-
+//similar to thread handling but in the JavaScript single thread environment
   const sendEmail = async () => {
     const emailData = {
       to: ["rakesh.pamulapati@gmail.com"], // 'to' as an array
@@ -64,7 +64,7 @@ function UserProfile() {
   
   
   
-
+// lambda expressions, concise way of handling multiple actions with a single ananymous function.
   useEffect(() => {
     const fetchProfile = async () => {
       if (auth.currentUser) {
@@ -95,7 +95,7 @@ function UserProfile() {
         }
       }
     };
-
+// System design pattern of the Singleton Pattern where a single instance of an object is used throughout an application in each class after user initialization.
     fetchProfile();
   }, [auth, db]);
   const calculateDailyCalorieLimit = (
